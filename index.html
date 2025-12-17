@@ -109,7 +109,7 @@
         <div class="row">
           <div>
             <label>初始手数</label>
-            <input id="initLot" type="number" step="0.01" value="1" />
+            <input id="initLot" type="number" step="0.01" value="0.1" />
           </div>
           <div>
             <label>马丁倍率</label>
@@ -143,7 +143,7 @@
 <div class="row">
   <div>
     <label>每组止盈（点）</label>
-    <input id="tpPts" type="number" value="99" />
+    <input id="tpPts" type="number" value="100" />
   </div>
   <div></div>
 </div>
@@ -164,10 +164,10 @@
   </main>
 
   <footer>
-    <div class="muted"></p>偏移为自动计算：BUY当前价 = 开仓价 − 偏移</p>
-		<p>SELL当前价 = 开仓价 + 偏移</p>
-		<p>保证金 = BUY总手数 × (BUY当前价 ÷ 杠杆)</p>
-		<p>净值 = | 总浮亏 + 保证金 × 50% |</p></div>
+    <div class="muted"><p><strong>偏移为自动计算：BUY当前价 = 开仓价 − 偏移</strong></p>
+		<p><strong>SELL当前价 = 开仓价 + 偏移</strong></p>
+		<p><strong>保证金 = BUY总手数 × (BUY当前价 ÷ 杠杆)</strong></p>
+		<p><strong>净值 = | 总浮亏 + 保证金 × 50% |</strong></p></div>
   </footer>
 
 <script>
@@ -302,7 +302,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   simulate();
 });
 
-setInterval(fetchGoldPrice, 10000);
+setInterval(fetchGoldPrice, 300000);
 
 
 async function fetchGoldPrice() {
