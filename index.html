@@ -296,44 +296,36 @@ document.getElementById('btnSim').addEventListener('click', simulate);
 ['basePrice','gapPts','orders','initLot','tpPts','mult'].forEach(id=>{
   const el=document.getElementById(id); if (el) el.addEventListener('input', ()=>{recomputeDeltaAndCurrents();});
 });
+
 window.addEventListener('DOMContentLoaded', () => {
-  fetchGoldPrice();      // chạy NGAY khi F5
+  fetchGoldPrice();   // F5 cập nhật NGAY
   recomputeDeltaAndCurrents();
   simulate();
 });
 
-// ⚠️ ĐỪNG để 10s
-setInterval(fetchGoldPrice, 300000); // 5 phút
+// mỗi 5 phút
+setInterval(fetchGoldPrice, 300000);
 
 
 
 async function fetchGoldPrice() {
   try {
-    const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
-      method: "GET",
-      headers: {
-        "x-access-token": "goldapi-5rk3ysmja4izfz-io",
-        "Content-Type": "application/json"
-      }
-    });
-
-    if (!res.ok) {
-      console.error("GoldAPI HTTP error:", res.status);
-      return;
-    }
-
+    const res = await fetch("https://data-asg.goldprice.org/dbXRates/USD");
     const data = await res.json();
 
-    if (data && typeof data.price === "number") {
-      const price = data.price;
-      const baseInput = document.getElementById("basePrice");
+    if (!data || !data.items || !data.items.length) return;
 
-      baseInput.value = price.toFixed(2);
-      recomputeDeltaAndCurrents();
-      simulate();
-    }
+    const price = data.items[0].xauPrice;
+
+    const baseInput = document.getElementById("basePrice");
+    baseInput.value = price.toFixed(2);
+
+    recomputeDeltaAndCurrents();
+    simulate();
+
+    console.log("Gold price updated:", price);
   } catch (err) {
-    console.error("GoldAPI fetch error:", err);
+    console.error("GoldPrice API error:", err);
   }
 }
 
