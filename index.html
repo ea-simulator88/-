@@ -293,7 +293,44 @@ document.getElementById('btnSim').addEventListener('click', simulate);
 ['basePrice','gapPts','orders','initLot','tpPts','mult'].forEach(id=>{
   const el=document.getElementById(id); if (el) el.addEventListener('input', ()=>{recomputeDeltaAndCurrents();});
 });
-window.addEventListener('DOMContentLoaded', ()=>{recomputeDeltaAndCurrents(); simulate();});
+window.addEventListener('DOMContentLoaded', ()=>{
+  fetchGoldPrice();          // 🔥 lấy giá vàng thật từ GoldAPI
+  recomputeDeltaAndCurrents();
+  simulate();
+});
+
+setInterval(fetchGoldPrice, 10000);
 </script>
+
+async function fetchGoldPrice() {
+  try {
+    const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
+      method: "GET",
+      headers: {
+        "x-access-token": "goldapi-5rk3ysmja4izfz-io",
+        "Content-Type": "application/json"
+      }
+    });
+
+    const data = await res.json();
+
+    if (data && typeof data.price === "number") {
+      const price = data.price;
+      const baseInput = document.getElementById("basePrice");
+
+      baseInput.value = price.toFixed(2);
+
+      recomputeDeltaAndCurrents();
+      simulate();
+    }
+  } catch (err) {
+    console.error("GoldAPI fetch error:", err);
+  }
+}
+
+
+
+
 </body>
 </html>
+
