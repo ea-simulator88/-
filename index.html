@@ -301,8 +301,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
   recomputeDeltaAndCurrents();
   simulate();
 });
+fetchGoldPrice(); // 🔥 chạy NGAY khi load / F5
 
-setInterval(fetchGoldPrice, 300000);
+setInterval(fetchGoldPrice, 300000); // 5 phút / lần
 
 
 async function fetchGoldPrice() {
