@@ -296,14 +296,15 @@ document.getElementById('btnSim').addEventListener('click', simulate);
 ['basePrice','gapPts','orders','initLot','tpPts','mult'].forEach(id=>{
   const el=document.getElementById(id); if (el) el.addEventListener('input', ()=>{recomputeDeltaAndCurrents();});
 });
-window.addEventListener('DOMContentLoaded', ()=>{
-  fetchGoldPrice();          // 🔥 lấy giá vàng thật từ GoldAPI
+window.addEventListener('DOMContentLoaded', () => {
+  fetchGoldPrice();      // chạy NGAY khi F5
   recomputeDeltaAndCurrents();
   simulate();
 });
-fetchGoldPrice(); // 🔥 chạy NGAY khi load / F5
 
-setInterval(fetchGoldPrice, 10000); // 5 phút / lần
+// ⚠️ ĐỪNG để 10s
+setInterval(fetchGoldPrice, 300000); // 5 phút
+
 
 
 async function fetchGoldPrice() {
@@ -316,6 +317,11 @@ async function fetchGoldPrice() {
       }
     });
 
+    if (!res.ok) {
+      console.error("GoldAPI HTTP error:", res.status);
+      return;
+    }
+
     const data = await res.json();
 
     if (data && typeof data.price === "number") {
@@ -323,7 +329,6 @@ async function fetchGoldPrice() {
       const baseInput = document.getElementById("basePrice");
 
       baseInput.value = price.toFixed(2);
-
       recomputeDeltaAndCurrents();
       simulate();
     }
